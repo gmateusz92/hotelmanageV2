@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+dd
+
+
+{{ room_detail }}
+
+
+{% for room in rooms %}
+
+<li><b>{{ room.room_no }}. {{ room.room_type_id }} persons</b></li>
+
+{% endfor %}
+
+{% endblock %}
