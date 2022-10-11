@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 import uuid
+from django.contrib.auth.models import User
 
 
 # class CustomAccountManager(BaseUserManager):
@@ -148,7 +149,12 @@ class Room(models.Model):
     is_active = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'Room {self.room_no} price:{self.price} is currently {self.room_status_id}'
+        return f'Room {self.room_no} price:{self.price}'
 
+class Book(models.Model):
+    room_id = models.ForeignKey(Room, on_delete=models.CASCADE)
+    customer_id = models.ForeignKey(Accounts, on_delete=models.CASCADE, null=True)
 
-
+    def __str__(self):
+        return f'Rezerwacja {self.customer_id.first_name} {self.customer_id.last_name}'
+#trzeba sprobowac tak jak add cart w ecomreceudemy

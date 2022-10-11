@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Accounts, Room, RoomType, RoomStatus
+from .models import Accounts, Room, RoomType, RoomStatus, Book
 from django.contrib.auth.admin import UserAdmin
 from django.forms import TextInput, Textarea
 
@@ -39,3 +39,4 @@ admin.site.register(Accounts, AccountAdmin)
 admin.site.register(Room)
 admin.site.register(RoomStatus)
 admin.site.register(RoomType)
+admin.site.register(Book)

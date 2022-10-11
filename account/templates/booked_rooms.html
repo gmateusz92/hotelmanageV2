@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1> Your reservations</h1>
+
+{% for book in booked %}
+
+<li><b>{{ book.room_id }}</b></li>
+
+{% endfor %}
+
+{% endblock %}

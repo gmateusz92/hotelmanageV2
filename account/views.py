@@ -6,7 +6,12 @@ from django.shortcuts import render, redirect
 from .forms import RegistrationForm
 from .models import Accounts
 from django.contrib import messages, auth
-from .models import Room, RoomStatus, RoomType
+from .models import Room, RoomStatus, RoomType, Book
+from django.contrib.auth import logout
+from django.http import HttpResponseRedirect
+from .forms import BookForm
+from .models import Book
+
 
 def home(request):
     rooms = Room.objects.all()#.filter(is_active=True)
@@ -25,8 +30,28 @@ def room_detail_view(request, room_pk):
     context = {'room_detail': room_detail}
     return render(request, 'rooms/room_detail_view.html', context)
 
-# def show_1person:
-#     pass
+# def booked_rooms(request,room_id):
+#     room_detail = get_object_or_404(RoomType, pk=room_id)
+#     return render(request, 'booked_rooms.html',{'room_detail': room_detail})
+
+def book(request):
+    if request.method == 'GET':
+        return render(request, 'book.html', {'form': BookForm})
+    else:
+        try:
+            form = BookForm(request.POST)
+            newbook = form.save(commit=False)
+            newbook.user = request.user
+            newbook.save()
+            return redirect('book')
+        except ValueError:
+            return render(request, 'book.html', {'form': BookForm, 'error': 'Bad data pass in'})
+
+def booked_rooms(request):
+    booked = Book.objects.all()
+    context = {'booked': booked}
+    return render(request, 'booked_rooms.html', context)
+
 
 #def register(request):
     # context = {}
@@ -99,3 +124,22 @@ def register_superuser(request):
         'form': form
     }
     return render(request, 'register_superuser.html', context)
+
+def login(request):
+    if request.method == 'POST':
+        email = request.POST['email']
+        password = request.POST['password']
+
+        user = auth.authenticate(email=email, password=password)
+        if user is not None:
+            auth.login(request, user)
+            #messages.succes(request, 'You are now logiged in.')
+            return redirect('home')
+        else:
+            messages.error(request, 'Invalid login credenctials')
+            return redirect('login')
+    return render(request, 'login.html')
+
+def logout_view(request):
+    logout(request)
+    return redirect('home')

@@ -1,16 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
-dd
 
+<div class="container text-center">
+<p><h1> Room detail:</h1></p>
 
-{{ room_detail }}
-
-
-{% for room in rooms %}
-
-<li><b>{{ room.room_no }}. {{ room.room_type_id }} persons</b></li>
-
-{% endfor %}
+<br>Number of room:  {{ room_detail.room_no }}</br>
+<br>Type of room:{{ room_detail.room_type_id }}</br>
+<br>Price for room:{{ room_detail.price }}</br>
+    xxx
+<form action="{% url 'book' %}" method="POST" xxx>
+    {% csrf_token %}
+<button type="submit"> Book!! </button>
+</div>
 
 {% endblock %}
