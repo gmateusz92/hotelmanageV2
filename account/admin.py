@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Accounts
+from .models import Accounts, Room, RoomType, RoomStatus
 from django.contrib.auth.admin import UserAdmin
 from django.forms import TextInput, Textarea
 
@@ -36,3 +36,6 @@ class AccountAdmin(UserAdmin): #do tego zeby nie dalo sie edytowac hasla wpanelu
     fieldsets = ()
 
 admin.site.register(Accounts, AccountAdmin)
+admin.site.register(Room)
+admin.site.register(RoomStatus)
+admin.site.register(RoomType)

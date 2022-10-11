@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate
 from .forms import RegistrationForm
 
@@ -6,10 +6,27 @@ from django.shortcuts import render, redirect
 from .forms import RegistrationForm
 from .models import Accounts
 from django.contrib import messages, auth
-
+from .models import Room, RoomStatus, RoomType
 
 def home(request):
-    return render(request, 'home.html')
+    rooms = Room.objects.all()#.filter(is_active=True)
+    room_status = RoomStatus.objects.all()
+    count_all = rooms.count()
+    count_available = room_status.count()
+
+    context = {'rooms': rooms,
+               'count_available': count_available,
+               'count_all': count_all,
+               'room_status': room_status}
+    return render(request, 'home.html', context)
+
+def room_detail_view(request, room_pk):
+    room_detail = get_object_or_404(Room, pk=room_pk) #mozna dawać room_pk albo room_id
+    context = {'room_detail': room_detail}
+    return render(request, 'rooms/room_detail_view.html', context)
+
+# def show_1person:
+#     pass
 
 #def register(request):
     # context = {}
