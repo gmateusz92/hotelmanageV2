@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import Accounts, Book
+from .models import Accounts, BookedRoom
 from django.forms import ModelForm
 
 class RegistrationForm(forms.ModelForm):
@@ -10,7 +10,7 @@ class RegistrationForm(forms.ModelForm):
         model = Accounts
         fields = ['first_name', 'last_name', 'phone_number', 'email', 'password']
 
-class BookForm(ModelForm):
-    class Meta:
-        model = Book
-        fields = ['room_id', 'customer_id']
+# class BookForm(ModelForm):
+#     class Meta:
+#         model = BookedRoom
+#         fields = ['room_id', 'customer_id']

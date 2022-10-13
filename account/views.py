@@ -6,11 +6,11 @@ from django.shortcuts import render, redirect
 from .forms import RegistrationForm
 from .models import Accounts
 from django.contrib import messages, auth
-from .models import Room, RoomStatus, RoomType, Book
+from .models import Room, RoomStatus, RoomType, Accounts
 from django.contrib.auth import logout
 from django.http import HttpResponseRedirect
-from .forms import BookForm
-from .models import Book
+#from .forms import BookForm
+from .models import BookedRoom, CartBook
 
 
 def home(request):
@@ -25,32 +25,73 @@ def home(request):
                'room_status': room_status}
     return render(request, 'home.html', context)
 
+
+
 def room_detail_view(request, room_pk):
     room_detail = get_object_or_404(Room, pk=room_pk) #mozna dawać room_pk albo room_id
     context = {'room_detail': room_detail}
     return render(request, 'rooms/room_detail_view.html', context)
 
-# def booked_rooms(request,room_id):
-#     room_detail = get_object_or_404(RoomType, pk=room_id)
-#     return render(request, 'booked_rooms.html',{'room_detail': room_detail})
+def _cartbook_id(request):
+    cartbook = request.session.session_key
+    if not cartbook:
+        cart = request.session.create()
+    return cartbook
 
-def book(request):
-    if request.method == 'GET':
-        return render(request, 'book.html', {'form': BookForm})
-    else:
-        try:
-            form = BookForm(request.POST)
-            newbook = form.save(commit=False)
-            newbook.user = request.user
-            newbook.save()
-            return redirect('book')
-        except ValueError:
-            return render(request, 'book.html', {'form': BookForm, 'error': 'Bad data pass in'})
+# def book_room(request, room_id):
+#     current_user = request.user
+#     room = Room.objects.get(id=room_id) #get the product
+#     # If the user is authenticated
+#     if current_user.is_authenticated:
+#        # product_variation = []
+#         if request.method == 'POST':
+#             for item in request.POST:
+#                 key = item
+#                 value = request.POST[key]
+#
+#                 try:
+#                     variation = Variation.objects.get(product=product, variation_category__iexact=key, variation_value__iexact=value)
+#                     product_variation.append(variation)
+#                 except:
+#                     pass
+#
+# def book(request):
+#     if request.method == 'GET':
+#         return render(request, 'book.html', {'form': BookForm})
+#     else:
+#         try:
+#             form = BookForm(request.POST)
+#             newbook = form.save(commit=False)
+#             newbook.user = request.user
+#             newbook.save()
+#             return redirect('book')
+#         except ValueError:
+#             return render(request, 'book.html', {'form': BookForm, 'error': 'Bad data pass in'})
 
 def booked_rooms(request):
-    booked = Book.objects.all()
+    #if request.user.is_authenticated:
+    booked = BookedRoom.objects.filter(user=request.user)
     context = {'booked': booked}
     return render(request, 'booked_rooms.html', context)
+
+def book(request):
+    room = Room.objects.get(id=room_id)
+    if request.method == 'POST':
+        for item in request.POST:
+            key = item
+            value = request.POST[key]
+            item = BookedRoom.objects.create(room=room, id=room_id)
+            item.save
+
+# def booked_rooms(request, new={}):
+#     context = {}
+#     id_r = request.user.id
+#     book_list = BookedRoom.objects.filter(userid=id_r)
+#     if book_list:
+#         return render(request, 'booked_rooms.html', locals())
+#     else:
+#
+#         return render(request, 'myapp/findbus.html', context)
 
 
 #def register(request):

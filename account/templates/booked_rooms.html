@@ -6,7 +6,17 @@
 
 {% for book in booked %}
 
-<li><b>{{ book.room_id }}</b></li>
+<p>{{ book.room }}</p>
+{{ book.quantity }}
+{{ book.price }}
+
+{% endfor %}
+
+
+
+{% for book in booked_rooms %}
+
+<li><b>{{ book }}</b></li>
 
 {% endfor %}
 

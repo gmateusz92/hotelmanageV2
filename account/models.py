@@ -151,10 +151,26 @@ class Room(models.Model):
     def __str__(self):
         return f'Room {self.room_no} price:{self.price}'
 
-class Book(models.Model):
-    room_id = models.ForeignKey(Room, on_delete=models.CASCADE)
-    customer_id = models.ForeignKey(Accounts, on_delete=models.CASCADE, null=True)
+class CartBook(models.Model):
+    book_id = models.CharField(max_length=5, blank=True)
+    date_added = models.DateField(auto_now_add=True)
 
     def __str__(self):
-        return f'Rezerwacja {self.customer_id.first_name} {self.customer_id.last_name}'
-#trzeba sprobowac tak jak add cart w ecomreceudemy
+        return f'Rezerwacja {self.book_id}'
+
+class BookedRoom(models.Model):
+    user = models.ForeignKey(Accounts, on_delete=models.CASCADE, null=True)
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    room_type = models.ForeignKey(RoomType, blank=True, on_delete=models.CASCADE)
+    cartbook    = models.ForeignKey(CartBook, on_delete=models.CASCADE, null=True)
+    quantity = models.IntegerField()
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f'Rezerwacja {self.user}'
+
+    def sub_total(self):
+        return self.room.price * self.quantity
+
+    # def __unicode__(self):
+    #     return self.room

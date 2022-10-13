@@ -10,7 +10,7 @@ urlpatterns = [
     path('login/', views.login, name='login'),
     path('logout/', views.logout_view, name='logout_view'),
 
-    path('book/', views.book, name='book'),
+    #path('book/', views.book, name='book'),
     path('booked_rooms/', views.booked_rooms, name='booked_rooms'),
     path('<uuid:room_pk>/', views.room_detail_view, name='room_detail_view'),
     ]
